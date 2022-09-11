@@ -18,12 +18,38 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @{
+                            yemektarifleriDBContext db = new yemektarifleriDBContext();
+                            var ustmenu = db.Menulers.Where(eleman => eleman.UstId == null && eleman.Silindi == false && eleman.Aktif == true).OrderBy(e => e.Sira).ToList();
+
+                            foreach (var item in ustmenu)
+                            {
+
+                                var altmenu = db.Menulers.Where(eleman => eleman.UstId == item.MenuId && eleman.Silindi == false && eleman.Aktif == true).OrderBy(e => e.Sira).ToList();
+                                if (altmenu.Count == 0)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="@item.Url">@item.Baslik</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                            @item.Baslik
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            @foreach (var item2 in altmenu)
+                                            {
+                                                <a class="dropdown-item" href="@item2.Url">@item2.Baslik</a>
+
+                                            }                                  
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        }
+            
                     </ul>
                 </div>
             </div>

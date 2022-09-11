@@ -18,9 +18,11 @@ namespace OrnekUygulama.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
-            return View();
+            yemektarifleriDBContext db = new yemektarifleriDBContext();
+            var sayfa = db.Sayfalars.Where(a => a.Silindi == false && a.Aktif == true && a.SayfaId == id).FirstOrDefault();
+            return View(sayfa);
         }
 
         public IActionResult Privacy()
