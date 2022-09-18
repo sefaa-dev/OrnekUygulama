@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OrnekUygulama.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace OrnekUygulama.Controllers
 {
     public class YonetimController : Controller
     {
+        yemektarifleriDBContext db = new yemektarifleriDBContext();
         public IActionResult Index()
         {
             return View();
@@ -27,6 +29,24 @@ namespace OrnekUygulama.Controllers
         public IActionResult Bilgilerim()
         {
             return View();
+        }
+        public IActionResult Sayfalar()
+        {
+            var sayfalar = db.Sayfalars.Where(s => s.Silindi == false).OrderBy(s => s.Baslik).ToList();
+
+            return View(sayfalar);
+        }
+        public IActionResult SayfaEkle()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult SayfaEkle(Sayfalar s)
+        {
+            s.Silindi = false;
+            db.Sayfalars.Add(s);
+            db.SaveChanges();
+            return RedirectToAction("Sayfalar");
         }
         public IActionResult CikisYap()
         {
