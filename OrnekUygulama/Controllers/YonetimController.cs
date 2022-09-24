@@ -48,6 +48,34 @@ namespace OrnekUygulama.Controllers
             db.SaveChanges();
             return RedirectToAction("Sayfalar");
         }
+        public IActionResult SayfaGetir(int id)
+        {
+            var sayfa = db.Sayfalars.Where(s => s.Silindi == false && s.SayfaId == id).FirstOrDefault();
+
+            return View("SayfaGuncelle",sayfa);         
+        }
+        public IActionResult SayfaGuncelle(Sayfalar syf)
+        {
+            var sayfa = db.Sayfalars.Where(s => s.Silindi == false && s.SayfaId == syf.SayfaId).FirstOrDefault();
+
+            sayfa.Baslik = syf.Baslik;
+            sayfa.Icerik = syf.Icerik;
+            sayfa.Aktif = syf.Aktif;
+            db.Sayfalars.Update(sayfa);
+            db.SaveChanges();
+            return RedirectToAction("Sayfalar");
+        }
+
+        public IActionResult SayfaSil(int id)
+        {
+            var sayfa = db.Sayfalars.Where(s => s.Silindi == false && s.SayfaId == id).FirstOrDefault();
+
+            sayfa.Silindi = true;
+           
+            db.Sayfalars.Update(sayfa);
+            db.SaveChanges();
+            return RedirectToAction("Sayfalar");
+        }
         public IActionResult CikisYap()
         {
             return View();
