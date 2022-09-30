@@ -76,6 +76,56 @@ namespace OrnekUygulama.Controllers
             db.SaveChanges();
             return RedirectToAction("Sayfalar");
         }
+
+
+
+
+
+        public IActionResult Kategoriler()
+        {
+            var kategoriler = db.Kategorilers.Where(k => k.Silindi == false).OrderBy(k => k.Kategoriadi).ToList();
+
+            return View(kategoriler);
+        }
+        public IActionResult KategoriEkle()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult KategoriEkle(Kategoriler k)
+        {
+            k.Silindi = false;
+            db.Kategorilers.Add(k);
+            db.SaveChanges();
+            return RedirectToAction("Kategoriler");
+        }
+        public IActionResult KategoriGetir(int id)
+        {
+            var kategori = db.Kategorilers.Where(k => k.Silindi == false && k.KategoriId == id).FirstOrDefault();
+
+            return View("KategoriGuncelle", kategori);
+        }
+        public IActionResult KategoriGuncelle(Kategoriler ktgr)
+        {
+            var kategori = db.Kategorilers.Where(k => k.Silindi == false && k.KategoriId == ktgr.KategoriId).FirstOrDefault();
+
+            kategori.Kategoriadi = ktgr.Kategoriadi;
+
+            kategori.Aktif = ktgr.Aktif;
+            db.Kategorilers.Update(kategori);
+            db.SaveChanges();
+            return RedirectToAction("Kategori");
+        }
+
+        public IActionResult KategoriSil(int id)
+        {
+            var kategori = db.Kategorilers.Where(k => k.Silindi == false && k.KategoriId == id).FirstOrDefault();
+            kategori.Silindi = true;
+
+            db.Kategorilers.Update(kategori);
+            db.SaveChanges();
+            return RedirectToAction("Kategoriler");
+        }
         public IActionResult CikisYap()
         {
             return View();
