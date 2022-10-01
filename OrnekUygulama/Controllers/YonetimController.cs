@@ -105,6 +105,15 @@ namespace OrnekUygulama.Controllers
 
             return View("KategoriGuncelle", kategori);
         }
+
+
+        public IActionResult KategoriYemekler(int id)
+        {
+            var yemekler = db.YemekTarifleris.Where(y => y.Silindi == false && y.KategoriId == id).ToList();
+
+            return View("Tarifler", yemekler);
+
+        }
         public IActionResult KategoriGuncelle(Kategoriler ktgr)
         {
             var kategori = db.Kategorilers.Where(k => k.Silindi == false && k.KategoriId == ktgr.KategoriId).FirstOrDefault();
@@ -114,7 +123,7 @@ namespace OrnekUygulama.Controllers
             kategori.Aktif = ktgr.Aktif;
             db.Kategorilers.Update(kategori);
             db.SaveChanges();
-            return RedirectToAction("Kategori");
+            return RedirectToAction("Kategoriler");
         }
 
         public IActionResult KategoriSil(int id)

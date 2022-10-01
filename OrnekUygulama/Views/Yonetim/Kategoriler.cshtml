@@ -40,7 +40,7 @@
             <td>
                 <a asp-action="KategoriGetir" asp-route-id="@item.KategoriId">Düzenle</a> |
                 <a asp-action="KategoriYemekler" asp-route-id="@item.KategoriId">Yemekler</a> |
-                <a asp-action="KategoriSil" asp-route-id="@item.KategoriId">Sil</a>
+                <a asp-action="KategoriSil" asp-route-id="@item.KategoriId" onclick="return confirm('Bu kategori silinsin mi?')">Sil</a>
             </td>
         </tr>
 }

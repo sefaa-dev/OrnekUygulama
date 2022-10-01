@@ -1,7 +1,7 @@
 ﻿@model OrnekUygulama.Models.Kategoriler
 
 @{
-    ViewData["Title"] = "KategoriEkle";
+    ViewData["Title"] = "KategoriGuncelle";
     Layout = "~/Views/Shared/_yonetimTema.cshtml";
 }
 
@@ -10,8 +10,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="KategoriEkle">
+        <form asp-action="KategoriGuncelle">
             <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="KategoriId" />
             <div class="form-group">
                 <label asp-for="Kategoriadi" class="control-label"></label>
                 <input asp-for="Kategoriadi" class="form-control" />
@@ -26,9 +27,9 @@
                 </select>
                 <span asp-validation-for="Aktif" class="text-danger"></span>
             </div>
-      
+     
             <div class="form-group">
-                <input type="submit" value="Ekle" class="btn btn-primary" />
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
             </div>
         </form>
     </div>
