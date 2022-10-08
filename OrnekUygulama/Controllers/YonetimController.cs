@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using OrnekUygulama.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +16,7 @@ namespace OrnekUygulama.Controllers
         {
             return View();
         }
-        public IActionResult Tarifler()
-        {
-            return View();
-        }
+   
         public IActionResult Yorumlar()
         {
             return View();
@@ -109,7 +108,7 @@ namespace OrnekUygulama.Controllers
 
         public IActionResult KategoriYemekler(int id)
         {
-            var yemekler = db.YemekTarifleris.Where(y => y.Silindi == false && y.KategoriId == id).ToList();
+            var yemekler = db.YemekTarifleris.Include(k => k.Kategori).Where(y => y.Silindi == false && y.KategoriId == id).ToList();
 
             return View("Tarifler", yemekler);
 
@@ -134,6 +133,75 @@ namespace OrnekUygulama.Controllers
             db.Kategorilers.Update(kategori);
             db.SaveChanges();
             return RedirectToAction("Kategoriler");
+        }
+
+
+
+
+        public IActionResult Tarifler()
+        {
+            var tarifler = db.YemekTarifleris.Include(k => k.Kategori).Where(t => t.Silindi == false).OrderBy(t => t.Yemekadi).ToList();
+
+            return View(tarifler);
+        }
+        public IActionResult TarifEkle()
+        {
+            var kategoriler = (from k in db.Kategorilers.Where(k => k.Silindi == false && k.Aktif == true).ToList()
+                               select new SelectListItem
+                               {
+                                   Text = k.Kategoriadi,
+                                   Value = k.KategoriId.ToString()
+                               });
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult TarifEkle(YemekTarifleri t)
+        {
+            t.Silindi = false;
+            db.YemekTarifleris.Add(t);
+            db.SaveChanges();
+            return RedirectToAction("Tarifler");
+        }
+        public IActionResult TarifGetir(int id)
+        {
+            var tarif = db.YemekTarifleris.Where(t => t.Silindi == false && t.TarifId == id).FirstOrDefault();
+
+            return View("TarifGuncelle", tarif);
+        }
+
+
+        public IActionResult TarifYorumlari(int id)
+        {
+            var yorumlar = db.Yorumlars.Where(y => y.Silindi == false && y.TarifId == id).ToList();
+
+            return View("Yorumlar", yorumlar);
+
+        }
+        public IActionResult TarifGuncelle(YemekTarifleri trf)
+        {
+            var tarif = db.YemekTarifleris.Where(t => t.Silindi == false && t.TarifId == trf.TarifId).FirstOrDefault();
+
+            tarif.Yemekadi = trf.Yemekadi;
+
+            tarif.Tarif = trf.Tarif;
+            tarif.Sira = trf.Sira;
+            tarif.KategoriId = trf.KategoriId;
+            tarif.Aktif = trf.Aktif;
+
+            db.YemekTarifleris.Update(tarif);
+            db.SaveChanges();
+            return RedirectToAction("Tarifler");
+        }
+
+        public IActionResult TarifSil(int id)
+        {
+            var tarif = db.YemekTarifleris.Where(t => t.Silindi == false && t.TarifId == id).FirstOrDefault();
+            tarif.Silindi = true;
+
+            db.YemekTarifleris.Update(tarif);
+            db.SaveChanges();
+            return RedirectToAction("Tarif");
         }
         public IActionResult CikisYap()
         {

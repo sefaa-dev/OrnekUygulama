@@ -5,20 +5,20 @@
     Layout = "~/Views/Shared/_yonetimTema.cshtml";
 }
 
-<h1>Tarifler</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="TarifEkle">Yeni Tarif</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <td>
+              ID
+            </td>
             <th>
-                @Html.DisplayNameFor(model => model.Yemekadi)
+              Yemek Adı
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tarif)
-            </th>
+        
             <th>
                 @Html.DisplayNameFor(model => model.Sira)
             </th>
@@ -28,9 +28,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Aktif)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Silindi)
-            </th>
+           
             <th>
                 @Html.DisplayNameFor(model => model.Kategori)
             </th>
@@ -40,12 +38,14 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.TarifId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Yemekadi)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tarif)
-            </td>
+         
             <td>
                 @Html.DisplayFor(modelItem => item.Sira)
             </td>
@@ -55,16 +55,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Aktif)
             </td>
+
             <td>
-                @Html.DisplayFor(modelItem => item.Silindi)
+                @Html.DisplayFor(modelItem => item.Kategori.Kategoriadi)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Kategori.KategoriId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TarifId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TarifId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TarifId">Delete</a>
+                <a asp-action="TarifGetir" asp-route-id="@item.TarifId">Düzenle</a> |
+                <a asp-action="TarifSil" asp-route-id="@item.TarifId">Sil</a> |
+                <a asp-action="TarifYorumlar" asp-route-id="@item.TarifId">Yorumlar</a>
             </td>
         </tr>
 }
