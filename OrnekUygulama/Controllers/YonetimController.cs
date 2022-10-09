@@ -152,20 +152,33 @@ namespace OrnekUygulama.Controllers
                                    Text = k.Kategoriadi,
                                    Value = k.KategoriId.ToString()
                                });
+            ViewBag.KategoriId = kategoriler;
 
             return View();
         }
         [HttpPost]
         public IActionResult TarifEkle(YemekTarifleri t)
         {
+
             t.Silindi = false;
+            t.Eklemetarihi = DateTime.Now;
             db.YemekTarifleris.Add(t);
             db.SaveChanges();
             return RedirectToAction("Tarifler");
         }
         public IActionResult TarifGetir(int id)
         {
-            var tarif = db.YemekTarifleris.Where(t => t.Silindi == false && t.TarifId == id).FirstOrDefault();
+            var tarif = db.YemekTarifleris.Include(k => k.Kategori).Where(t => t.Silindi == false && t.TarifId == id).FirstOrDefault();
+
+            var kategoriler = (from k in db.Kategorilers.Where(k => k.Silindi == false && k.Aktif == true).ToList()
+                               select new SelectListItem
+                               {
+                                   Text = k.Kategoriadi,
+                                   Value = k.KategoriId.ToString()
+                               });
+            ViewBag.KategoriId = kategoriler;
+
+
 
             return View("TarifGuncelle", tarif);
         }
@@ -201,7 +214,7 @@ namespace OrnekUygulama.Controllers
 
             db.YemekTarifleris.Update(tarif);
             db.SaveChanges();
-            return RedirectToAction("Tarif");
+            return RedirectToAction("Tarifler");
         }
         public IActionResult CikisYap()
         {

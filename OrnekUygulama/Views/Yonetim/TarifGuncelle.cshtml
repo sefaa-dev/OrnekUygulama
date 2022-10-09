@@ -1,7 +1,7 @@
 ﻿@model OrnekUygulama.Models.YemekTarifleri
 
 @{
-    ViewData["Title"] = "TarifEkle";
+    ViewData["Title"] = "TarifGuncelle";
     Layout = "~/Views/Shared/_yonetimTema.cshtml";
 }
 
@@ -12,8 +12,9 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="TarifEkle">
+        <form asp-action="TarifGuncelle">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TarifId" />
             <div class="form-group">
                 <label asp-for="Yemekadi" class="control-label"></label>
                 <input asp-for="Yemekadi" class="form-control" />
@@ -26,7 +27,6 @@
                     CKEDITOR.replace("Tarif")
                 </script>
                 <span asp-validation-for="Tarif" class="text-danger"></span>
-
             </div>
             <div class="form-group">
                 <label asp-for="Sira" class="control-label"></label>
@@ -36,8 +36,9 @@
             <div class="form-group">
                 <label asp-for="KategoriId" class="control-label"></label>
                 <select asp-for="KategoriId" class="form-control" asp-items="ViewBag.KategoriId"></select>
+                <span asp-validation-for="KategoriId" class="text-danger"></span>
             </div>
-       
+           
             <div class="form-group">
                 <label asp-for="Aktif" class="control-label"></label>
                 <select asp-for="Aktif" class="form-control">
@@ -47,9 +48,9 @@
                 </select>
                 <span asp-validation-for="Aktif" class="text-danger"></span>
             </div>
-
+           
             <div class="form-group">
-                <input type="submit" value="Ekle" class="btn btn-primary" />
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
             </div>
         </form>
     </div>
